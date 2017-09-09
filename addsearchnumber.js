@@ -9,7 +9,6 @@
 // Crazy solution: assume keypress happens only immediately after keydown.  Have onkeydown set
 // a global variable, suppressKeypress, to tell onkeypress whether to stopPropagation and stuff.
 //
-// http://www.mozilla.org/projects/deerpark/new-web-dev-features.html
 // https://bugzilla.mozilla.org/show_bug.cgi?id=167145
 
 var suppressKeypress = false;
@@ -51,7 +50,7 @@ function searchkeysKeydown(event)
     return;
 
   // Don't trigger if a form element has focus.
-  // Copied from http://lxr.mozilla.org/aviarybranch/source/browser/base/content/browser.js#shouldFastFind.
+  // Copied from https://dxr.mozilla.org/aviarybranch/source/browser/base/content/browser.js#shouldFastFind
   // Modified to not care about <button> elements.  (<input type="button">, though...)
   // Modified for paranoia.
   var elt = document.commandDispatcher.focusedElement;
@@ -124,7 +123,7 @@ function whereToOpen(e)
 }
 
 
-// http://kb.mozillazine.org/On_Page_Load
+// https://developer.mozilla.org/en-US/Add-ons/Code_snippets/On_page_load
 // https://bugzilla.mozilla.org/show_bug.cgi?id=329514
 // Need to test: load in foreground tab. middle-clicking "next" should do the right thing (and not the wrong thing).
 // Need to test: Firefox 1.5.0.7, Firefox 2.
@@ -330,7 +329,8 @@ var searchkeysEngines = [
   // Each search engine has two boolean functions:
   //
   // * test(uri).  Returns true if this URL is a search results page for this search engine.
-  //     See http://lxr.mozilla.org/aviarybranch/source/netwerk/base/public/nsIURI.idl#42 for how to use nsIURI objects.
+  //     Look at the following page for how to use nsIURI objects:
+  //       https://hg.mozilla.org/mozilla-central/file/ea7b55d65d76/netwerk/base/nsIURI.idl#l8
   //
   // * testLink(linkNode).  Returns true if this link represents a search result.
   //
