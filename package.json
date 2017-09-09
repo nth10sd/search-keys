@@ -1,0 +1,19 @@
+{
+  "name": "add-search-number",
+  "version": "1.9.0",
+  "description": "Add Search Number allows going to search results by pressing a number instead of clicking.",
+  "main": "addsearchnumber.js",
+  "devDependencies": {
+    "eslint": "^4.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "author": "Gary Kwong",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nth10sd/add-search-number.git"
+  }
+}
