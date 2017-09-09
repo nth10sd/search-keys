@@ -4,18 +4,14 @@
 
 (function() { // just for scoping
 
+// With Shift+1, keydown gets "1" (keyCode-48) while keypress gets "!" (charCode) with an American keyboard.
+// But we have to use keypress to suppress FAYT.
+// Crazy solution: assume keypress happens only immediately after keydown.  Have onkeydown set
+// a global variable, suppressKeypress, to tell onkeypress whether to stopPropagation and stuff.
+//
+// http://www.mozilla.org/projects/deerpark/new-web-dev-features.html
+// https://bugzilla.mozilla.org/show_bug.cgi?id=167145
 
-
-
-/*
- * With Shift+1, keydown gets "1" (keyCode-48) while keypress gets "!" (charCode) with an American keyboard.
- * But we have to use keypress to suppress FAYT.
- * Crazy solution: assume keypress happens only immediately after keydown.  Have onkeydown set
- * a global variable, suppressKeypress, to tell onkeypress whether to stopPropagation and stuff.
- *
- * http://www.mozilla.org/projects/deerpark/new-web-dev-features.html
- * https://bugzilla.mozilla.org/show_bug.cgi?id=167145
- */
 var suppressKeypress = false;
 
 window.addEventListener("keydown", searchkeysKeydown, true); // Use capturing to beat FAYT.
@@ -81,6 +77,7 @@ function searchkeysKeydown(event)
   suppressKeypress = true;
 }
 
+
 function searchkeysKeypress(event)
 {
   if (suppressKeypress) {
@@ -89,8 +86,6 @@ function searchkeysKeypress(event)
   event.stopPropagation(); // stop FAYT. would like to just stop FAYT from *starting*, but oh well.
 	}
 }
-
-
 
 
 // Based on utilityOverlay.js from Firefox.
@@ -129,13 +124,10 @@ function whereToOpen(e)
 }
 
 
-
 // http://kb.mozillazine.org/On_Page_Load
 // https://bugzilla.mozilla.org/show_bug.cgi?id=329514
-
 // Need to test: load in foreground tab. middle-clicking "next" should do the right thing (and not the wrong thing).
 // Need to test: Firefox 1.5.0.7, Firefox 2.
-
 window.addEventListener("load", searchKeysInit, false);
 
 function searchKeysInit()
@@ -183,6 +175,7 @@ function onPageLoad(event)
   }
 }
 
+
 function addHint(linkNode, resultNumber)
 {
   var doc = linkNode.ownerDocument;
@@ -201,21 +194,21 @@ function addHint(linkNode, resultNumber)
   linkNode.parentNode.insertBefore(hint, linkNode.nextSibling);
 }
 
+
 function testLink(engine, link)
 {
   // Hack to not conflict with Search Preview and McSearchPreview extensions, which should be nice and use .className.
-  if (link.firstChild && link.firstChild.tagName && link.firstChild.tagName.toUpperCase() == "IMG" && link.firstChild.style && link.firstChild.style.margin)
+  if (link.firstChild && link.firstChild.tagName && link.firstChild.tagName.toUpperCase() == "IMG" &&
+      link.firstChild.style && link.firstChild.style.margin)
     return false;
 
   // Additional hack to not conflict with "new-window" link added by McSearchPreview extension.
-  if (link.getElementsByTagName("img")[0] && link.getElementsByTagName("img")[0].src == "http://docs.g-blog.net/code/mozilla_extensions/img/nw.gif")
+  if (link.getElementsByTagName("img")[0] &&
+      link.getElementsByTagName("img")[0].src == "http://docs.g-blog.net/code/mozilla_extensions/img/nw.gif")
     return false;
 
   return engine.testLink(link);
 }
-
-
-
 
 
 /*
@@ -245,9 +238,6 @@ function stringToURI(url, base)
 }
 
 
-
-
-
 function getActiveEngine(doc)
 {
   if (!doc.location) // when would this happen? it did...
@@ -266,6 +256,7 @@ function getActiveEngine(doc)
 
   return null;
 }
+
 
 function goToResult(engine, resultNumber, where)
 {
@@ -289,6 +280,7 @@ function goToResult(engine, resultNumber, where)
   // So just fail silently.
   // alert("Can't go to result number " + resultNumber + " of (number of search results)!");
 }
+
 
 function findResultNumbered(engine, resultNumber)
 {
@@ -324,6 +316,7 @@ function followLink(linkNode, where)
   openUILinkIn(url, where);
 }
 
+
 // Returns the first item of an array or NodeList.  If empty, returns null (without triggering a strict warning).
 function firstItem(a)
 {
@@ -332,8 +325,8 @@ function firstItem(a)
   return null;
 }
 
-var searchkeysEngines = [
 
+var searchkeysEngines = [
   // Each search engine has two boolean functions:
   //
   // * test(uri).  Returns true if this URL is a search results page for this search engine.
@@ -346,19 +339,25 @@ var searchkeysEngines = [
   // * prev(doc).  Returns a link to the previous page of search results, or null/undefined if none.
   //
   // * next(doc).  Returns a link to the next page of search results, or null/undefined if none.
-
   {
     // results in the "did you mean?" section have no className. other results have classname of l (lowercase L).
 
     name: "Google (web search)",
-    test: function (uri) { return uri.host.indexOf("google") != -1 && (uri.path.substr(0,8) == "/search?" || uri.path.substr(0,8) == "/custom?"); },
+    test: function (uri) { return uri.host.indexOf("google") != -1 &&
+                                    (uri.path.substr(0,8) == "/search?" || uri.path.substr(0,8) == "/custom?"); },
     testLink: function (linkNode) {
-      return (linkNode.className == "l" || linkNode.className == "") && // empty for did-you-mean results, which are desired
-             linkNode.parentNode.tagName.toLowerCase() == "h3" && // h4 for local maps results, which are not desired
+      return (linkNode.className == "l" || linkNode.className == "") && // empty for did-you-mean results (desired)
+             linkNode.parentNode.tagName.toLowerCase() == "h3" && // h4 for local maps results (not desired)
              linkNode.parentNode.className == "r";
     },
-    prev: function (doc) { var c = doc.getElementById("nav").rows[0].cells; return firstItem(c[0].getElementsByTagName("a")); },
-    next: function (doc) { var c = doc.getElementById("nav").rows[0].cells; return firstItem(c[c.length-1].getElementsByTagName("a")); },
+    prev: function (doc) {
+      var c = doc.getElementById("nav").rows[0].cells;
+      return firstItem(c[0].getElementsByTagName("a"));
+    },
+    next: function (doc) {
+      var c = doc.getElementById("nav").rows[0].cells;
+      return firstItem(c[c.length-1].getElementsByTagName("a"));
+    },
   },
 
   {
@@ -381,4 +380,5 @@ var searchkeysEngines = [
     next: function (doc) { return firstItem(doc.getElementsByClassName("sb_pagN")); }
   }
 ];
+
 })();
