@@ -117,9 +117,9 @@ function searchkeysKeydown(event)
 function searchkeysKeypress(event)
 {
   if (suppressKeypress) {
-	  // We handled the event, discourage others from handling it too.
-	  event.preventDefault(); // seems like a good idea
-	  event.stopPropagation(); // stop FAYT. would like to just stop FAYT from *starting*, but oh well.
+  // We handled the event, discourage others from handling it too.
+  event.preventDefault(); // seems like a good idea
+  event.stopPropagation(); // stop FAYT. would like to just stop FAYT from *starting*, but oh well.
 	}
 }
 
@@ -137,7 +137,7 @@ function whereToOpen(e)
 
   var shift = e.shiftKey;
   var ctrl =  e.ctrlKey;
-  var meta =  e.metaKey;
+  // var meta =  e.metaKey;
   var alt  =  e.altKey;
 
   if (altForTabs ? (alt && !ctrl) : (ctrl && !alt)) { /* Mac normally uses cmd (meta), btw */
@@ -171,7 +171,7 @@ function whereToOpen(e)
 
 window.addEventListener("load", searchKeysInit, false);
 
-function searchKeysInit(event)
+function searchKeysInit()
 {
   window.removeEventListener("load", searchKeysInit, false); // Don't want this firing for e.g. page loads in Firefox 2
 
@@ -260,16 +260,15 @@ function stringToURI(url, base)
 {
   var uri;
 
-  var ioService = Components.
-	  		            classes["@mozilla.org/network/io-service;1"].
-		  	              getService(Components.interfaces.nsIIOService);
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"].
+                    getService(Components.interfaces.nsIIOService);
 
   try {
-	  uri = ioService.newURI(url, null, base || null);
+    uri = ioService.newURI(url, null, base || null);
 	}
 	catch(er) {
-	  // aim: URLs, totally bogus URLs resulting from "remove redirects" on a javascript: link, etc.
-	  return null;
+    // aim: URLs, totally bogus URLs resulting from "remove redirects" on a javascript: link, etc.
+    return null;
 	}
 
   if (uri.schemeIs("http") || uri.schemeIs("https"))
@@ -415,30 +414,4 @@ var searchkeysEngines = [
     next: function (doc) { return firstItem(doc.getElementsByClassName("sb_pagN")); }
   }
 ];
-
-
-
-// Helper functions for above
-
-function ancestor(node, num)
-{
-  while (node && num) {
-    node = node.parentNode;
-    --num;
-  }
-}
-
-
-function linkAncestor(x)
-{
-  // Assumes HTML... probably a safe assumption for some time :)
-
-  for (; x; x = x.parentNode)
-    if (x.tagName && x.tagName.toUpperCase() == "A")
-      return x;
-
-  return null;
-}
-
-
 })();
