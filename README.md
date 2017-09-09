@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nth10sd/add-search-number.svg?branch=master)](https://travis-ci.org/nth10sd/add-search-number/)
+
 # Add Search Number
 A WebExtension port of "Search Keys" that allows going to search results by pressing a number instead of clicking.
 
