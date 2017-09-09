@@ -129,6 +129,7 @@ function whereToOpen(e)
 // Need to test: Firefox 1.5.0.7, Firefox 2.
 window.addEventListener("load", searchKeysInit, false);
 
+
 function searchKeysInit()
 {
   window.removeEventListener("load", searchKeysInit, false); // Don't want this firing for e.g. page loads in Firefox 2
@@ -136,6 +137,7 @@ function searchKeysInit()
   var appcontent = document.getElementById("appcontent");
   appcontent.addEventListener("load", onPageLoad, true);
 }
+
 
 function onPageLoad(event)
 {
