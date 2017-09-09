@@ -194,7 +194,7 @@ function onPageLoad(event)
   var currentResultNumber = 0;
 
   var i, link;
-  for (i = 0; link = links[i]; ++i) { // Warning: loop is very similar to a loop in another function
+  for (i = 0; (link = links[i]); ++i) { // Warning: loop is very similar to a loop in another function
     if (testLink(engine, link)) {
       ++currentResultNumber;
       addHint(link, currentResultNumber);
@@ -293,7 +293,7 @@ function getActiveEngine(doc)
     return null;
 
   var i, engine;
-  for (i = 0; engine = searchkeysEngines[i]; ++i)
+  for (i = 0; (engine = searchkeysEngines[i]); ++i)
     if (engine.test(uri))
       return engine;
 
@@ -330,7 +330,7 @@ function findResultNumbered(engine, resultNumber)
   var currentResultNumber = 0;
 
   var i, link;
-  for (i = 0; link = links[i]; ++i) { // Warning: loop is very similar to a loop in another function
+  for (i = 0; (link = links[i]); ++i) { // Warning: loop is very similar to a loop in another function
     if (testLink(engine, link)) {
       ++currentResultNumber;
       if (currentResultNumber == resultNumber) {
