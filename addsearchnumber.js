@@ -13,8 +13,8 @@
 
 var suppressKeypress = false;
 
-window.addEventListener("keydown", searchkeysKeydown, true); // Use capturing to beat FAYT.
-window.addEventListener("keypress", searchkeysKeypress, true); // Use capturing to beat FAYT.
+window.addEventListener("keydown", searchnumbersKeydown, true); // Use capturing to beat FAYT.
+window.addEventListener("keypress", searchnumbersKeypress, true); // Use capturing to beat FAYT.
 
 
 function keycodeToTarget(keyCode)
@@ -38,7 +38,7 @@ function keycodeToTarget(keyCode)
 }
 
 
-function searchkeysKeydown(event)
+function searchnumbersKeydown(event)
 {
   suppressKeypress = false;
 
@@ -77,7 +77,7 @@ function searchkeysKeydown(event)
 }
 
 
-function searchkeysKeypress(event)
+function searchnumbersKeypress(event)
 {
   if (suppressKeypress) {
   // We handled the event, discourage others from handling it too.
@@ -127,12 +127,12 @@ function whereToOpen(e)
 // https://bugzilla.mozilla.org/show_bug.cgi?id=329514
 // Need to test: load in foreground tab. middle-clicking "next" should do the right thing (and not the wrong thing).
 // Need to test: Firefox 1.5.0.7, Firefox 2.
-window.addEventListener("load", searchKeysInit, false);
+window.addEventListener("load", searchNumbersInit, false);
 
 
-function searchKeysInit()
+function searchNumbersInit()
 {
-  window.removeEventListener("load", searchKeysInit, false); // Don't want this firing for e.g. page loads in Firefox 2
+  window.removeEventListener("load", searchNumbersInit, false); // Don't want this firing for e.g. page loads in Firefox 2
 
   var appcontent = document.getElementById("appcontent");
   appcontent.addEventListener("load", onPageLoad, true);
@@ -182,7 +182,7 @@ function addHint(linkNode, resultNumber)
   var doc = linkNode.ownerDocument;
 
   var hint = doc.createElementNS("http://www.w3.org/1999/xhtml", "span");
-  hint.className = "searchkeys-hint" // for the benefit of user style sheets, test styles
+  hint.className = "searchnumbers-hint" // for the benefit of user style sheets, test styles
   hint.style.color = "green";
   hint.style.background = "white";
   hint.style.border = "1px solid";
@@ -251,7 +251,7 @@ function getActiveEngine(doc)
     return null;
 
   var i, engine;
-  for (i = 0; (engine = searchkeysEngines[i]); ++i)
+  for (i = 0; (engine = searchnumbersEngines[i]); ++i)
     if (engine.test(uri))
       return engine;
 
@@ -327,7 +327,7 @@ function firstItem(a)
 }
 
 
-var searchkeysEngines = [
+var searchnumbersEngines = [
   // Each search engine has two boolean functions:
   //
   // * test(uri).  Returns true if this URL is a search results page for this search engine.
