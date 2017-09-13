@@ -33,13 +33,27 @@ var searchnumbersEngines = [
         linkNode.parentNode.tagName.toLowerCase() == "h3" && // h4 for local maps results (not desired)
         linkNode.parentNode.className == "r";
     },
-    prev: function (doc) {
-      var c = doc.getElementById("nav").rows[0].cells;
-      return firstItem(c[0].getElementsByTagName("a"));
+    prev: function (document) {
+      var c = document.getElementById("nav").rows[0].cells;
+      var pNode = firstItem(c[0].getElementsByTagName("a"));
+      if (!pNode)
+        return null;
+      return {
+        "focus": pNode.focus(),
+        "href": pNode.href,
+        "clickNode": pNode.lastElementChild
+      }
     },
-    next: function (doc) {
-      var c = doc.getElementById("nav").rows[0].cells;
-      return firstItem(c[c.length - 1].getElementsByTagName("a"));
+    next: function (document) {
+      var c = document.getElementById("nav").rows[0].cells;
+      var nNode = firstItem(c[c.length - 1].getElementsByTagName("a"));
+      if (!nNode)
+        return null;
+      return {
+        "focus": nNode.focus(),
+        "href": nNode.href,
+        "clickNode": nNode.lastElementChild
+      }
     },
   }
 ];
@@ -78,13 +92,13 @@ function init() {
   if (engine.next) {
     var next = engine.next(document);
     if (next)
-      next.appendChild(document.createTextNode(" (.)"));
+      next.clickNode.appendChild(document.createTextNode(" (.)"));
   }
 
   if (engine.prev) {
     var prev = engine.prev(document);
     if (prev)
-      prev.appendChild(document.createTextNode(" (,)"));
+      prev.clickNode.appendChild(document.createTextNode(" (,)"));
   }
 }
 
@@ -260,7 +274,7 @@ function goToResult(engine, resultNumber, where) {
   if (link) {
     // Focus the link.
     // (Selecting it might be better, but this works for now.)
-    link.focus();
+    link.focus;
 
     var urlout = ensureURL(link.href);
 
@@ -284,7 +298,7 @@ function goToResult(engine, resultNumber, where) {
         "url": urlout.href
       });
     } else return;
-  }
+  } else return;  // Might be an absent "prev" or "next"
 }
 
 
