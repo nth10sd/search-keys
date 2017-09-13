@@ -226,10 +226,6 @@ function goToResult(engine, resultNumber, where) {
     var url = uri.spec;
     openUILinkIn(url, where);
   }
-
-  // Using alert breaks the blocking-FAYT hack, sucks if you press '1' while the page is loading, etc.
-  // So just fail silently.
-  // alert("Can't go to result number " + resultNumber + " of (number of search results)!");
 }
 
 
