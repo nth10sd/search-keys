@@ -63,7 +63,7 @@
     if (where == "ignore")
       return; // in particular, don't suppress the keypress
 
-    var activeEngine = getActiveEngine(_content.document);
+    var activeEngine = getActiveEngine(content.document);
     if (!activeEngine)
       return;
 
@@ -233,7 +233,7 @@
 
   function goToResult(engine, resultNumber, where) {
     var link;
-    var doc = _content.document; // only called for the current tab, so should be correct.
+    var doc = content.document; // only called for the current tab, so should be correct.
 
     if (resultNumber == "next" && engine.next) {
       link = engine.next(doc);
@@ -263,7 +263,7 @@
 
 
   function findResultNumbered(engine, resultNumber) {
-    var links = _content.document.links;
+    var links = content.document.links;
 
     var currentResultNumber = 0;
 
