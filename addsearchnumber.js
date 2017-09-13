@@ -52,7 +52,7 @@ function searchnumbersKeydown(event) {
   if (where == "ignore")
     return; // in particular, don't suppress the keypress
 
-  var activeEngine = getActiveEngine(content.document);
+  var activeEngine = getActiveEngine(document);
   if (!activeEngine)
     return;
 
@@ -227,7 +227,7 @@ function goToResult(engine, resultNumber, where) {
 
 
 function findResultNumbered(engine, resultNumber) {
-  var links = content.document.links;
+  var links = document.links;
 
   var currentResultNumber = 0;
 
