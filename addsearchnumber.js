@@ -343,40 +343,6 @@
         var c = doc.getElementById("nav").rows[0].cells;
         return firstItem(c[c.length - 1].getElementsByTagName("a"));
       },
-    },
-
-    {
-      name: "Yahoo (web search)",
-      test: function (uri) {
-        return uri.host == "search.yahoo.com";
-      },
-      testLink: function (linkNode) {
-        return linkNode.className == "yschttl spt";
-      },
-      prev: function (doc) {
-        return doc.getElementById("pg-prev");
-      },
-      next: function (doc) {
-        return doc.getElementById("pg-next");
-      }
-    },
-
-    {
-      name: "Bing (web search)",
-      test: function (uri) {
-        return uri.host.match(/(^|\.)bing.com$/)
-      },
-      testLink: function (linkNode) {
-        return linkNode.parentNode && linkNode.parentNode.parentNode &&
-          linkNode.parentNode.tagName.toLowerCase() == "h3" &&
-          linkNode.parentNode.parentNode.className == "sb_tlst"
-      },
-      prev: function (doc) {
-        return firstItem(doc.getElementsByClassName("sb_pagP"));
-      },
-      next: function (doc) {
-        return firstItem(doc.getElementsByClassName("sb_pagN"));
-      }
     }
   ];
 

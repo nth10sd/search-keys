@@ -9,11 +9,9 @@ Ported from Jesse Ruderman's [legacy add-on](https://www.squarefree.com/extensio
 For example, pressing 1 takes you to the first result. Hold Alt (Windows/Mac) or Ctrl (Linux) to open results in new tabs, or Shift to open results in new windows.
 
 This extension can save you time because your hands are usually on the keyboard after you enter a search.
-
-Search Keys supports Google, Bing, and Yahoo.
-
-Adding support for a new search engine only requires a few lines of code. Future versions may make it possible to add engines without editing the source.
 ```
+
+Add Search Number supports Google only for now.
 
 # Requirements
 Tested in Firefox 55 and up.
