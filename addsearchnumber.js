@@ -26,12 +26,6 @@
     if (96 < keyCode && keyCode <= 105) return keyCode - 96;
     if (keyCode == 96) return 10; // zero
 
-    if (keyCode == 188) // , or <
-      return "prev";
-
-    if (keyCode == 190) // . or >
-      return "next";
-
     // Any other key
     return null;
   }
@@ -40,7 +34,7 @@
   function searchnumbersKeydown(event) {
     suppressKeypress = false;
 
-    // A number from 1 to 10, "next", "prev", or null.
+    // A number from 1 to 10, or null.
     var target = keycodeToTarget(event.keyCode);
 
     // Only trigger for digits, comma, and period.
@@ -117,7 +111,7 @@
 
   // https://developer.mozilla.org/en-US/Add-ons/Code_snippets/On_page_load
   // https://bugzilla.mozilla.org/show_bug.cgi?id=329514
-  // Need to test: load in foreground tab. middle-clicking "next" should do the right thing (and not the wrong thing).
+  // Need to test: load in foreground tab
   // Need to test: Firefox 1.5.0.7, Firefox 2.
   window.addEventListener("load", searchNumbersInit, false);
 
@@ -152,18 +146,6 @@
         if (currentResultNumber == 10)
           break;
       }
-    }
-
-    if (engine.next) {
-      var next = engine.next(doc);
-      if (next)
-        next.appendChild(doc.createTextNode(" (.)"));
-    }
-
-    if (engine.prev) {
-      var prev = engine.prev(doc);
-      if (prev)
-        prev.appendChild(doc.createTextNode(" (,)"));
     }
   }
 
@@ -232,16 +214,7 @@
 
 
   function goToResult(engine, resultNumber, where) {
-    var link;
-    var doc = content.document; // only called for the current tab, so should be correct.
-
-    if (resultNumber == "next" && engine.next) {
-      link = engine.next(doc);
-    } else if (resultNumber == "prev" && engine.prev) {
-      link = engine.prev(doc);
-    } else {
-      link = findResultNumbered(engine, resultNumber);
-    }
+    var link = findResultNumbered(engine, resultNumber);
 
     if (link) {
       // Focus the link.
@@ -282,14 +255,6 @@
   }
 
 
-  // Returns the first item of an array or NodeList.  If empty, returns null (without triggering a strict warning).
-  function firstItem(a) {
-    if (a.length > 0)
-      return a[0];
-    return null;
-  }
-
-
   var searchnumbersEngines = [
     // Each search engine has two boolean functions:
     //
@@ -298,12 +263,6 @@
     //       https://hg.mozilla.org/mozilla-central/file/ea7b55d65d76/netwerk/base/nsIURI.idl#l8
     //
     // * testLink(linkNode).  Returns true if this link represents a search result.
-    //
-    // Two optional functions return link nodes:
-    //
-    // * prev(doc).  Returns a link to the previous page of search results, or null/undefined if none.
-    //
-    // * next(doc).  Returns a link to the next page of search results, or null/undefined if none.
     {
       // results in the "did you mean?" section have no className. other results have classname of l (lowercase L).
 
@@ -316,14 +275,6 @@
         return (linkNode.className == "l" || linkNode.className == "") && // empty for did-you-mean results (desired)
           linkNode.parentNode.tagName.toLowerCase() == "h3" && // h4 for local maps results (not desired)
           linkNode.parentNode.className == "r";
-      },
-      prev: function (doc) {
-        var c = doc.getElementById("nav").rows[0].cells;
-        return firstItem(c[0].getElementsByTagName("a"));
-      },
-      next: function (doc) {
-        var c = doc.getElementById("nav").rows[0].cells;
-        return firstItem(c[c.length - 1].getElementsByTagName("a"));
       },
     }
   ];
