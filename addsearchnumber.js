@@ -2,11 +2,25 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+// Returns the first item of an array or NodeList.  If empty, returns null (without triggering a strict warning).
+function firstItem(a) {
+  if (a.length > 0)
+    return a[0];
+  return null;
+}
+
+
 var searchnumbersEngines = [
   // Each search engine has two boolean functions:
   //
   // * test(url).  Returns true if this URL is a search results page for this search engine.
   // * testLink(linkNode).  Returns true if this link represents a search result.
+  //
+  // Two optional functions return link nodes:
+  //
+  // * prev(doc).  Returns a link to the previous page of search results, or null/undefined if none.
+  //
+  // * next(doc).  Returns a link to the next page of search results, or null/undefined if none.
   {
     // results in the "did you mean?" section have no className. other results have classname of l (lowercase L).
 
@@ -18,6 +32,14 @@ var searchnumbersEngines = [
       return (linkNode.className == "l" || linkNode.className == "") && // empty for did-you-mean results (desired)
         linkNode.parentNode.tagName.toLowerCase() == "h3" && // h4 for local maps results (not desired)
         linkNode.parentNode.className == "r";
+    },
+    prev: function (doc) {
+      var c = doc.getElementById("nav").rows[0].cells;
+      return firstItem(c[0].getElementsByTagName("a"));
+    },
+    next: function (doc) {
+      var c = doc.getElementById("nav").rows[0].cells;
+      return firstItem(c[c.length - 1].getElementsByTagName("a"));
     },
   }
 ];
@@ -52,6 +74,18 @@ function init() {
         break;
     }
   }
+
+  if (engine.next) {
+    var next = engine.next(document);
+    if (next)
+      next.appendChild(document.createTextNode(" (.)"));
+  }
+
+  if (engine.prev) {
+    var prev = engine.prev(document);
+    if (prev)
+      prev.appendChild(document.createTextNode(" (,)"));
+  }
 }
 
 init();
@@ -80,6 +114,12 @@ function keycodeToTarget(keyCode) {
   if (96 < keyCode && keyCode <= 105) return keyCode - 96;
   if (keyCode == 96) return 10; // zero
 
+  if (keyCode == 188) // , or <
+    return "prev";
+
+  if (keyCode == 190) // . or >
+    return "next";
+
   // Any other key
   return null;
 }
@@ -88,7 +128,7 @@ function keycodeToTarget(keyCode) {
 function searchnumbersKeydown(event) {
   suppressKeypress = false;
 
-  // A number from 1 to 10, or null.
+  // A number from 1 to 10, "next", "prev", or null.
   var target = keycodeToTarget(event.keyCode);
 
   // Only trigger for digits, comma, and period.
@@ -207,7 +247,15 @@ function getActiveEngine(doc) {
 
 
 function goToResult(engine, resultNumber, where) {
-  var link = findResultNumbered(engine, resultNumber);
+  var link;
+
+  if (resultNumber == "next" && engine.next) {
+    link = engine.next(document);
+  } else if (resultNumber == "prev" && engine.prev) {
+    link = engine.prev(document);
+  } else {
+    link = findResultNumbered(engine, resultNumber);
+  }
 
   if (link) {
     // Focus the link.
