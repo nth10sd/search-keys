@@ -13,4 +13,23 @@ function getMessage(message) {
 
 }
 
+
+// function getActiveTab() {
+//   return browser.tabs.query({
+//     active: true,
+//     currentWindow: true
+//   });
+// }
+
+
+// function gotPlatformInfo(info) {
+//   getActiveTab().then((tabs) => {
+//     browser.tabs.sendMessage(tabs[0].id, {
+//       platform: info.os
+//     })
+//   })
+// }
+
+
 browser.runtime.onMessage.addListener(getMessage);
+// browser.runtime.getPlatformInfo().then(gotPlatformInfo);

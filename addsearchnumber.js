@@ -75,6 +75,15 @@ function searchnumbersKeypress(event) {
 
 // Based on utilityOverlay.js from Firefox.
 function whereToOpen(e) {
+  // This isn't working yet. This will likely improve cross-browser support.
+  //
+  // var currentPlatform = "";
+  // browser.runtime.onMessage.addListener(request => {
+  //   currentPlatform = request.platform;
+  // });
+  // var win = (currentPlatform.indexOf("win") !== -1);
+  // var mac = (currentPlatform.indexOf("mac") !== -1);
+
   // Platform differences suck.
   // Really want to say "#ifndef XP_UNIX" from 256635, but I don't know how to do that in JS.
   var win = (navigator.platform.indexOf("Win") != -1);
