@@ -40,10 +40,7 @@ function searchnumbersKeydown(event) {
     return;
 
   // Don't trigger if a form element has focus.
-  // Copied from https://dxr.mozilla.org/aviarybranch/source/browser/base/content/browser.js#shouldFastFind
-  // Modified to not care about <button> elements.  (<input type="button">, though...)
-  // Modified for paranoia.
-  var elt = document.commandDispatcher.focusedElement;
+  var elt = document.activeElement;
   if (elt) {
     var ln = new String(elt.localName).toLowerCase();
     if (ln == "input" || ln == "textarea" || ln == "select" || ln == "isindex")
