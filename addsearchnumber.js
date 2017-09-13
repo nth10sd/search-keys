@@ -18,9 +18,11 @@ var searchnumbersEngines = [
   //
   // Two optional functions return link nodes:
   //
-  // * prev(doc).  Returns a link to the previous page of search results, or null/undefined if none.
+  // * prev(doc).  Returns an object with the link to the previous page of search results and the node to be clicked,
+  //               or null if none.
   //
-  // * next(doc).  Returns a link to the next page of search results, or null/undefined if none.
+  // * next(doc).  Returns an object with the link to the next page of search results and the node to be clicked,
+  //               or null if none.
   {
     // results in the "did you mean?" section have no className. other results have classname of l (lowercase L).
 
