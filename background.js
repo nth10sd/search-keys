@@ -3,14 +3,25 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 function getMessage(message) {
-  if (message.selection) console.log("FOO");
-  // console.log(browser.pageAction.getTitle())
-  // browser.tabs.create({
-  //     active: true,
-  //     //  index: tabPosition,
-  //     url: "https://www.google.com/"
-  // })
-
+  if (message.selection == "current") {
+    // Navigate to the URL in the current tab
+    browser.tabs.update({
+      active: true,
+      url: message.url
+    })
+  } else if (message.selection == "tab") {
+    // Navigate to the URL in a new tab
+    browser.tabs.create({
+      active: true,
+      // openerTabId: XX,  # Wait for Firefox 57, see bug 1238314
+      url: message.url
+    })
+  } else if (message.selection == "window") {
+    // Navigate to the URL in a new window
+    browser.windows.create({
+      url: message.url
+    })
+  }
 }
 
 

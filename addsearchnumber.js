@@ -5,18 +5,14 @@
 var searchnumbersEngines = [
   // Each search engine has two boolean functions:
   //
-  // * test(uri).  Returns true if this URL is a search results page for this search engine.
-  //     Look at the following page for how to use nsIURI objects:
-  //       https://hg.mozilla.org/mozilla-central/file/ea7b55d65d76/netwerk/base/nsIURI.idl#l8
-  //
+  // * test(url).  Returns true if this URL is a search results page for this search engine.
   // * testLink(linkNode).  Returns true if this link represents a search result.
   {
     // results in the "did you mean?" section have no className. other results have classname of l (lowercase L).
 
     name: "Google (web search)",
-    test: function (uri) {
-      return uri.host.indexOf("google") != -1 &&
-        (uri.path.substr(0, 8) == "/search?" || uri.path.substr(0, 8) == "/custom?");
+    test: function (url) {
+      return url.host.indexOf("google") != -1 && url.pathname.substr(0, 7) == "/search";
     },
     testLink: function (linkNode) {
       return (linkNode.className == "l" || linkNode.className == "") && // empty for did-you-mean results (desired)
@@ -37,6 +33,42 @@ var suppressKeypress = false;
 
 window.addEventListener("keydown", searchnumbersKeydown, true); // Use capturing to beat FAYT.
 window.addEventListener("keypress", searchnumbersKeypress, true); // Use capturing to beat FAYT.
+
+
+function init() {
+  var engine = getActiveEngine(document);
+  if (!engine)
+    return null;
+
+  var currentResultNumber = 0;
+
+  var i, link;
+  for (i = 0;
+    (link = document.links[i]); ++i) { // Warning: loop is very similar to a loop in another function
+    if (engine.testLink(link)) {
+      ++currentResultNumber;
+      addHint(link, currentResultNumber);
+      if (currentResultNumber == 10)
+        break;
+    }
+  }
+}
+
+init();
+
+
+function ensureURL(urllink) {
+  var url;
+  url = new URL(urllink);
+
+  if (!url) return null;
+
+  if (url.protocol.indexOf("http") !== -1 || url.protocol.indexOf("https") !== -1) {
+    return url;
+  } else {
+    return null;
+  }
+}
 
 
 function keycodeToTarget(keyCode) {
@@ -137,47 +169,6 @@ function whereToOpen(e) {
 }
 
 
-// https://developer.mozilla.org/en-US/Add-ons/Code_snippets/On_page_load
-// https://bugzilla.mozilla.org/show_bug.cgi?id=329514
-// Need to test: load in foreground tab
-// Need to test: Firefox 1.5.0.7, Firefox 2.
-window.addEventListener("load", searchNumbersInit, false);
-
-
-function searchNumbersInit() {
-  window.removeEventListener("load", searchNumbersInit, false); // Don't want this firing for e.g. page loads in Firefox 2
-
-  var appcontent = document.getElementById("appcontent");
-  appcontent.addEventListener("load", onPageLoad, true);
-}
-
-
-function onPageLoad(event) {
-  var doc = event.originalTarget;
-  if (doc.nodeName != "#document")
-    return;
-
-  var engine = getActiveEngine(doc);
-  if (!engine || engine.noHints)
-    return;
-
-  var links = doc.links;
-
-  var currentResultNumber = 0;
-
-  var i, link;
-  for (i = 0;
-    (link = links[i]); ++i) { // Warning: loop is very similar to a loop in another function
-    if (engine.testLink(link)) {
-      ++currentResultNumber;
-      addHint(link, currentResultNumber);
-      if (currentResultNumber == 10)
-        break;
-    }
-  }
-}
-
-
 function addHint(linkNode, resultNumber) {
   var doc = linkNode.ownerDocument;
 
@@ -196,45 +187,19 @@ function addHint(linkNode, resultNumber) {
 }
 
 
-/*
-  * stringToURI: converts URL (string) to URI (nsIURI object), relative to base URI (if provided).
-  * Returns null for bogus or non-http URLs!  Caller must check!
-  * From Thumbs.
-  */
-function stringToURI(url, base) {
-  var uri;
-
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"].
-  getService(Components.interfaces.nsIIOService);
-
-  try {
-    uri = ioService.newURI(url, null, base || null);
-  } catch (er) {
-    // aim: URLs, totally bogus URLs resulting from "remove redirects" on a javascript: link, etc.
-    return null;
-  }
-
-  if (uri.schemeIs("http") || uri.schemeIs("https"))
-    return uri;
-
-  return null;
-}
-
-
 function getActiveEngine(doc) {
   if (!doc.location) // when would this happen? it did...
     return null;
 
-  // Use doc.documentURI instead of doc.location.href to work around bug 264830.
-  var uri = stringToURI(doc.documentURI);
+  var url = ensureURL(doc.location.href);
 
-  if (!uri)
+  if (!url)
     return null;
 
   var i, engine;
   for (i = 0;
     (engine = searchnumbersEngines[i]); ++i)
-    if (engine.test(uri))
+    if (engine.test(url))
       return engine;
 
   return null;
@@ -249,12 +214,28 @@ function goToResult(engine, resultNumber, where) {
     // (Selecting it might be better, but this works for now.)
     link.focus();
 
-    // Follow the link.
-    // (Using openUILink means we don't send a referrer.  That's a little sketchy.
-    // How about simulating a click and calling contentAreaClick or handleLinkClick?)
-    var uri = stringToURI(link.href); // for paranoia
-    var url = uri.spec;
-    openUILinkIn(url, where);
+    var urlout = ensureURL(link.href);
+
+    if (!urlout)
+      return;
+
+    // Follow the link, but note that no referrer is sent.
+    if (where == "current") {
+      browser.runtime.sendMessage({
+        "selection": where,
+        "url": urlout.href
+      });
+    } else if (where == "tab") {
+      browser.runtime.sendMessage({
+        "selection": where,
+        "url": urlout.href
+      });
+    } else if (where == "window") {
+      browser.runtime.sendMessage({
+        "selection": where,
+        "url": urlout.href
+      });
+    } else return;
   }
 }
 
