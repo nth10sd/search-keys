@@ -297,9 +297,6 @@
   }
 
 
-  function followLink(linkNode, where) {}
-
-
   // Returns the first item of an array or NodeList.  If empty, returns null (without triggering a strict warning).
   function firstItem(a) {
     if (a.length > 0)
