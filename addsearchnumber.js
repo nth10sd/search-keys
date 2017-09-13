@@ -2,6 +2,30 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+var searchnumbersEngines = [
+  // Each search engine has two boolean functions:
+  //
+  // * test(uri).  Returns true if this URL is a search results page for this search engine.
+  //     Look at the following page for how to use nsIURI objects:
+  //       https://hg.mozilla.org/mozilla-central/file/ea7b55d65d76/netwerk/base/nsIURI.idl#l8
+  //
+  // * testLink(linkNode).  Returns true if this link represents a search result.
+  {
+    // results in the "did you mean?" section have no className. other results have classname of l (lowercase L).
+
+    name: "Google (web search)",
+    test: function (uri) {
+      return uri.host.indexOf("google") != -1 &&
+        (uri.path.substr(0, 8) == "/search?" || uri.path.substr(0, 8) == "/custom?");
+    },
+    testLink: function (linkNode) {
+      return (linkNode.className == "l" || linkNode.className == "") && // empty for did-you-mean results (desired)
+        linkNode.parentNode.tagName.toLowerCase() == "h3" && // h4 for local maps results (not desired)
+        linkNode.parentNode.className == "r";
+    },
+  }
+];
+
 // With Shift+1, keydown gets "1" (keyCode-48) while keypress gets "!" (charCode) with an American keyboard.
 // But we have to use keypress to suppress FAYT.
 // Crazy solution: assume keypress happens only immediately after keydown.  Have onkeydown set
@@ -253,28 +277,3 @@ function findResultNumbered(engine, resultNumber) {
 
   return null;
 }
-
-
-var searchnumbersEngines = [
-  // Each search engine has two boolean functions:
-  //
-  // * test(uri).  Returns true if this URL is a search results page for this search engine.
-  //     Look at the following page for how to use nsIURI objects:
-  //       https://hg.mozilla.org/mozilla-central/file/ea7b55d65d76/netwerk/base/nsIURI.idl#l8
-  //
-  // * testLink(linkNode).  Returns true if this link represents a search result.
-  {
-    // results in the "did you mean?" section have no className. other results have classname of l (lowercase L).
-
-    name: "Google (web search)",
-    test: function (uri) {
-      return uri.host.indexOf("google") != -1 &&
-        (uri.path.substr(0, 8) == "/search?" || uri.path.substr(0, 8) == "/custom?");
-    },
-    testLink: function (linkNode) {
-      return (linkNode.className == "l" || linkNode.className == "") && // empty for did-you-mean results (desired)
-        linkNode.parentNode.tagName.toLowerCase() == "h3" && // h4 for local maps results (not desired)
-        linkNode.parentNode.className == "r";
-    },
-  }
-];
