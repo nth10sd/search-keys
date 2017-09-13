@@ -146,7 +146,7 @@
     var i, link;
     for (i = 0;
       (link = links[i]); ++i) { // Warning: loop is very similar to a loop in another function
-      if (testLink(engine, link)) {
+      if (engine.testLink(link)) {
         ++currentResultNumber;
         addHint(link, currentResultNumber);
         if (currentResultNumber == 10)
@@ -183,21 +183,6 @@
     hint.appendChild(doc.createTextNode(resultNumber == 10 ? 0 : resultNumber));
 
     linkNode.parentNode.insertBefore(hint, linkNode.nextSibling);
-  }
-
-
-  function testLink(engine, link) {
-    // Hack to not conflict with Search Preview and McSearchPreview extensions, which should be nice and use .className.
-    if (link.firstChild && link.firstChild.tagName && link.firstChild.tagName.toUpperCase() == "IMG" &&
-      link.firstChild.style && link.firstChild.style.margin)
-      return false;
-
-    // Additional hack to not conflict with "new-window" link added by McSearchPreview extension.
-    if (link.getElementsByTagName("img")[0] &&
-      link.getElementsByTagName("img")[0].src == "http://docs.g-blog.net/code/mozilla_extensions/img/nw.gif")
-      return false;
-
-    return engine.testLink(link);
   }
 
 
@@ -285,7 +270,7 @@
     var i, link;
     for (i = 0;
       (link = links[i]); ++i) { // Warning: loop is very similar to a loop in another function
-      if (testLink(engine, link)) {
+      if (engine.testLink(link)) {
         ++currentResultNumber;
         if (currentResultNumber == resultNumber) {
           return link;
