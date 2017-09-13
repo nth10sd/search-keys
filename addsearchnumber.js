@@ -258,8 +258,18 @@
       link = findResultNumbered(engine, resultNumber);
     }
 
-    if (link)
-      followLink(link, where);
+    if (link) {
+      // Focus the link.
+      // (Selecting it might be better, but this works for now.)
+      link.focus();
+
+      // Follow the link.
+      // (Using openUILink means we don't send a referrer.  That's a little sketchy.
+      // How about simulating a click and calling contentAreaClick or handleLinkClick?)
+      var uri = stringToURI(link.href); // for paranoia
+      var url = uri.spec;
+      openUILinkIn(url, where);
+    }
 
     // Using alert breaks the blocking-FAYT hack, sucks if you press '1' while the page is loading, etc.
     // So just fail silently.
@@ -287,18 +297,7 @@
   }
 
 
-  function followLink(linkNode, where) {
-    // Focus the link.
-    // (Selecting it might be better, but this works for now.)
-    linkNode.focus();
-
-    // Follow the link.
-    // (Using openUILink means we don't send a referrer.  That's a little sketchy.
-    // How about simulating a click and calling contentAreaClick or handleLinkClick?)
-    var uri = stringToURI(linkNode.href); // for paranoia
-    var url = uri.spec;
-    openUILinkIn(url, where);
-  }
+  function followLink(linkNode, where) {}
 
 
   // Returns the first item of an array or NodeList.  If empty, returns null (without triggering a strict warning).
