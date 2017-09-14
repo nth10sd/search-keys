@@ -294,7 +294,7 @@ function goToResult(engine, resultNumber, where) {
         "url": urlout.href
       });
     } else return;
-  } else return;  // Might be an absent "prev" or "next"
+  } else return; // Might be an absent "prev" or "next"
 }
 
 
