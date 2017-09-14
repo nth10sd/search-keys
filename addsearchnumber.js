@@ -2,14 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-// Returns the first item of an array or NodeList.  If empty, returns null (without triggering a strict warning).
-function firstItem(a) {
-  if (a.length > 0)
-    return a[0];
-  return null;
-}
-
-
 var searchnumbersEngines = [
   // Each search engine has two boolean functions:
   //
