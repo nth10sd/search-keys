@@ -41,7 +41,6 @@ var searchnumbersEngines = [
       if (!pNode)
         return null;
       return {
-        "focus": pNode.focus(),
         "href": pNode.href,
         "clickNode": pNode.lastElementChild
       }
@@ -52,7 +51,6 @@ var searchnumbersEngines = [
       if (!nNode)
         return null;
       return {
-        "focus": nNode.focus(),
         "href": nNode.href,
         "clickNode": nNode.lastElementChild
       }
@@ -274,10 +272,6 @@ function goToResult(engine, resultNumber, where) {
   }
 
   if (link) {
-    // Focus the link.
-    // (Selecting it might be better, but this works for now.)
-    link.focus;
-
     var urlout = ensureURL(link.href);
 
     if (!urlout)
