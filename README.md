@@ -18,9 +18,6 @@ Tested in Firefox 55 and up.
 
 # Known Bugs
 * When you use Search Keys to follow a link, the referrer is not sent.
-* Search Keys conflicts with Find
-  * If you press a number key while viewing a search-results page, Search Keys always handles it, even if you're trying to use Find and typed `/` or `'` beforehand
-  * This is arguably a bug in Firefox
 * If a search result's title text has a direction different from the page's direction (e.g. a Hebrew result in an English page), the green box indicating the shortcut is misplaced.
 * On the Hebrew-language version of Google, the hint should be placed to the left but is placed to the right.
 * Doesn't work when the search-results page is in a frame.
