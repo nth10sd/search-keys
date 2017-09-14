@@ -11,7 +11,7 @@ For example, pressing 1 takes you to the first result. Hold Alt (Windows/Mac) or
 This extension can save you time because your hands are usually on the keyboard after you enter a search.
 ```
 
-Add Search Number supports Google only for now.
+Add Search Number supports Google, Yahoo HK/TW/US, Bing, DuckDuckGo and Wikipedia.
 
 # Requirements
 Tested in Firefox 55 and up.

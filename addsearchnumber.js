@@ -45,7 +45,109 @@ var searchnumbersEngines = [
         "clickNode": nNode.lastElementChild
       }
     },
-  }
+  },
+  {
+    // Works with Yahoo HK/TW/US
+    name: "Yahoo (web search)",
+    test: function (url) {
+      return url.host.indexOf("yahoo") !== -1 && url.pathname.indexOf("/search") !== -1;
+    },
+    testLink: function (linkNode) {
+      // Yahoo has a bunch of randomly generated class names in the link nodes itself
+      return (linkNode.parentNode.parentNode.className.indexOf("comp") !== -1 &&
+          linkNode.parentNode.parentNode.className.toLowerCase().indexOf("title") !== -1) &&
+        // Ignore image and video results
+        (linkNode.parentNode.parentNode.parentNode.className.indexOf("dd algo") !== -1 ||
+          linkNode.parentNode.parentNode.parentNode.parentNode.className.indexOf("dd algo") !== -1) &&
+        (linkNode.parentNode.tagName.toLowerCase() === "h3" || linkNode.parentNode.tagName.toLowerCase() === "p") &&
+        (linkNode.parentNode.className === "title" || linkNode.parentNode.className === "");
+    },
+    prev: function (document) {
+      var nNode = document.querySelector("a.prev");
+      if (!nNode)
+        return null;
+      return {
+        "href": nNode.href,
+        "clickNode": nNode
+      }
+    },
+    next: function (document) {
+      var nNode = document.querySelector("a.next");
+      if (!nNode)
+        return null;
+      return {
+        "href": nNode.href,
+        "clickNode": nNode
+      }
+    },
+  },
+  {
+    name: "Bing (web search)",
+    test: function (url) {
+      return url.host.indexOf("bing") !== -1 && url.pathname.indexOf("/search") !== -1;
+    },
+    testLink: function (linkNode) {
+      return linkNode.parentNode.tagName.toLowerCase() === "h2" &&
+        linkNode.parentNode.parentNode.className === "b_algo";
+    },
+    prev: function (document) {
+      var nNode = document.querySelector("a.sb_pagP");
+      if (!nNode)
+        return null;
+      return {
+        "href": nNode.href,
+        "clickNode": nNode.parentNode
+      }
+    },
+    next: function (document) {
+      var nNode = document.querySelector("a.sb_pagN");
+      if (!nNode)
+        return null;
+      return {
+        "href": nNode.href,
+        "clickNode": nNode.parentNode
+      }
+    },
+  },
+  {
+    name: "DuckDuckGo (web search)",
+    test: function (url) {
+      return url.host.indexOf("duckduckgo") !== -1 && url.search.indexOf("?q=") !== -1;
+    },
+    testLink: function (linkNode) {
+      return linkNode.parentNode.querySelector("a.badge--ad") === null && // Ignore ads
+        linkNode.className === "result__a" &&
+        linkNode.parentNode.className === "result__title";
+    },
+    // DuckDuckGo continuously displays search results as you scroll, so support for "prev" and "next" are removed
+  },
+  {
+    name: "Wikipedia search",
+    test: function (url) {
+      return url.host.indexOf("wikipedia") !== -1 && url.search.toLowerCase().indexOf("special:search") !== -1;
+    },
+    testLink: function (linkNode) {
+      return linkNode.parentNode.className === "mw-search-result-heading";
+    },
+    prev: function (document) {
+      var nNode = document.querySelector("a.mw-prevlink");
+      if (!nNode)
+        return null;
+      return {
+        "href": nNode.href,
+        "clickNode": nNode
+      }
+    },
+    next: function (document) {
+      var nNode = document.querySelector("a.mw-nextlink");
+      if (!nNode)
+        return null;
+      return {
+        "href": nNode.href,
+        "clickNode": nNode
+      }
+    },
+  },
 ];
 
 // With Shift+1, keydown gets "1" (keyCode-48) while keypress gets "!" (charCode) with an American keyboard.
