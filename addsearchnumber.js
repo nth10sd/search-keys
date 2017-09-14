@@ -28,16 +28,15 @@ var searchnumbersEngines = [
 
     name: "Google (web search)",
     test: function (url) {
-      return url.host.indexOf("google") != -1 && url.pathname.substr(0, 7) == "/search";
+      return url.host.indexOf("google") !== -1 && url.pathname.indexOf("/search") !== -1;
     },
     testLink: function (linkNode) {
-      return (linkNode.className == "l" || linkNode.className == "") && // empty for did-you-mean results (desired)
-        linkNode.parentNode.tagName.toLowerCase() == "h3" && // h4 for local maps results (not desired)
-        linkNode.parentNode.className == "r";
+      return (linkNode.className === "l" || linkNode.className === "") && // empty for did-you-mean results (desired)
+        linkNode.parentNode.tagName.toLowerCase() === "h3" && // h4 for local maps results (not desired)
+        linkNode.parentNode.className === "r";
     },
     prev: function (document) {
-      var c = document.getElementById("nav").rows[0].cells;
-      var pNode = firstItem(c[0].getElementsByTagName("a"));
+      var pNode = document.querySelector("a[id='pnprev']");
       if (!pNode)
         return null;
       return {
@@ -46,8 +45,7 @@ var searchnumbersEngines = [
       }
     },
     next: function (document) {
-      var c = document.getElementById("nav").rows[0].cells;
-      var nNode = firstItem(c[c.length - 1].getElementsByTagName("a"));
+      var nNode = document.querySelector("a[id='pnnext']");
       if (!nNode)
         return null;
       return {
