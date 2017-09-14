@@ -13,7 +13,6 @@
       ]
   },
   "permissions": [
-    "activeTab",
     "tabs"
   ],
   "content_scripts": [
