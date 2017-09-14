@@ -1,6 +1,16 @@
 # Changelog
 
-* 1.9.0 beta (2017-09-08)
+* 2.0.0 (2017-09-13)
+  * Finally move off old legacy interfaces, e.g. nsIIOService
+  * Make search result link detection use querySelector
+  * We no longer focus on elements when they are selected as the focus code was not working well
+  * Reinstated/Added support for most major default search engines
+    * Yahoo HK/TW/US
+    * Bing
+    * DuckDuckGo
+    * Wikipedia
+
+* 1.9.0 beta (2017-09-08) - unreleased
   * Forked from [Search Keys](https://www.squarefree.com/extensions/search-keys/) version 1.0.1
   * Name changed to "Add Search Number"
   * Ported to WebExtensions
