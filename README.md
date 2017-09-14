@@ -17,7 +17,7 @@ Add Search Number supports Google only for now.
 Tested in Firefox 55 and up.
 
 # Known Bugs
-* When you use Search Keys to follow a link, the referrer is not sent.
+* When you use Add Search Number to follow a link, the referrer is not sent.
 * If a search result's title text has a direction different from the page's direction (e.g. a Hebrew result in an English page), the green box indicating the shortcut is misplaced.
 * On the Hebrew-language version of Google, the hint should be placed to the left but is placed to the right.
 * Doesn't work when the search-results page is in a frame.
