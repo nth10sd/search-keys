@@ -21,3 +21,17 @@ Tested in Firefox 55 and up.
 * If a search result's title text has a direction different from the page's direction (e.g. a Hebrew result in an English page), the green box indicating the shortcut is misplaced.
 * On the Hebrew-language version of Google, the hint should be placed to the left but is placed to the right.
 * Doesn't work when the search-results page is in a frame.
+
+# Screenshots
+* Google:
+![Screenshot of Google Search with search numbers][google-search]
+
+* Yahoo (US)
+![Screenshot of Yahoo Search (US) with search numbers][yahoo-us-search]
+
+* Bing
+![Screenshot of Bing Search with search numbers][bing-search]
+
+[google-search]: https://github.com/nth10sd/add-search-number/blob/master/screenshots/google.png "Screenshot of Google Search with search numbers"
+[yahoo-us-search]: https://github.com/nth10sd/add-search-number/blob/master/screenshots/yahoo-us.png "Screenshot of Yahoo Search (US) with search numbers"
+[bing-search]: https://github.com/nth10sd/add-search-number/blob/master/screenshots/bing.png "Screenshot of Bing Search with search numbers"
