@@ -1,8 +1,8 @@
 {
-  "name": "add-search-number",
-  "version": "2.0.0",
-  "description": "Add Search Number allows going to search results by pressing a number instead of clicking.",
-  "main": "addsearchnumber.js",
+  "name": "search-keys",
+  "version": "2.1.0",
+  "description": "Lets you go to search results by pressing the number of the search result.",
+  "main": "searchkeys.js",
   "devDependencies": {
     "eslint": "^4.6.1"
   },
@@ -14,6 +14,6 @@
   "license": "MPL-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nth10sd/add-search-number.git"
+    "url": "https://github.com/nth10sd/search-keys.git"
   }
 }

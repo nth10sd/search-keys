@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-var searchnumbersEngines = [
+var searchkeysEngines = [
   // Each search engine has two boolean functions:
   //
   // * test(url).  Returns true if this URL is a search results page for this search engine.
@@ -159,8 +159,8 @@ var searchnumbersEngines = [
 
 var suppressKeypress = false;
 
-window.addEventListener("keydown", searchnumbersKeydown, true); // Use capturing to beat FAYT.
-window.addEventListener("keypress", searchnumbersKeypress, true); // Use capturing to beat FAYT.
+window.addEventListener("keydown", searchkeysKeydown, true); // Use capturing to beat FAYT.
+window.addEventListener("keypress", searchkeysKeypress, true); // Use capturing to beat FAYT.
 
 
 function init() {
@@ -231,7 +231,7 @@ function keycodeToTarget(keyCode) {
 }
 
 
-function searchnumbersKeydown(event) {
+function searchkeysKeydown(event) {
   suppressKeypress = false;
 
   // A number from 1 to 10, "next", "prev", or null.
@@ -266,7 +266,7 @@ function searchnumbersKeydown(event) {
 }
 
 
-function searchnumbersKeypress(event) {
+function searchkeysKeypress(event) {
   if (suppressKeypress) {
     // We handled the event, discourage others from handling it too.
     event.preventDefault(); // seems like a good idea
@@ -319,7 +319,7 @@ function addHint(linkNode, resultNumber) {
   var doc = linkNode.ownerDocument;
 
   var hint = doc.createElementNS("http://www.w3.org/1999/xhtml", "span");
-  hint.className = "searchnumbers-hint" // for the benefit of user style sheets, test styles
+  hint.className = "searchkeys-hint" // for the benefit of user style sheets, test styles
   hint.style.color = "green";
   hint.style.background = "white";
   hint.style.border = "1px solid";
@@ -344,7 +344,7 @@ function getActiveEngine(doc) {
 
   var i, engine;
   for (i = 0;
-    (engine = searchnumbersEngines[i]); ++i)
+    (engine = searchkeysEngines[i]); ++i)
     if (engine.test(url))
       return engine;
 

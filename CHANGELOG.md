@@ -1,6 +1,11 @@
 # Changelog
 
+* 2.1.0 (2017-11-02)
+  * Unforked, returning to the "Search Keys" name
+  * Renamed back all references to "Add Search Number"
+
 * 2.0.0 (2017-09-13)
+  * Initially forked as "Add Search Number"
   * Finally move off old legacy interfaces, e.g. nsIIOService
   * Make search result link detection use querySelector
   * We no longer focus on elements when they are selected as the focus code was not working well
@@ -16,7 +21,7 @@
   * Ported to WebExtensions
   * Beta for now, until it is stable enough to hit 2.0.0
 
-The following is adapted from the [changelog](https://www.squarefree.com/extensions/search-keys/) of the Firefox legacy Search Keys add-on. All links updated to use https or point to an archive.org version where unavailable.
+The following is adapted from an old [changelog](https://www.squarefree.com/extensions/search-keys/). All links updated to use https or point to an archive.org version where unavailable.
 
 * Search Keys 1.0.1 (2010-01-05)
   * Fix JavaScript strict warnings
