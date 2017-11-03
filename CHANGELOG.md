@@ -7,7 +7,7 @@
 
 * 2.0.0 (2017-09-13)
   * Initially forked as "Add Search Number"
-  * Finally move off old legacy interfaces, e.g. nsIIOService
+  * Finally moved off old legacy interfaces, e.g. nsIIOService
   * Make search result link detection use querySelector
   * We no longer focus on elements when they are selected as the focus code was not working well
   * Reinstated/Added support for most major default search engines
