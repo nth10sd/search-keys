@@ -3,6 +3,7 @@
 * 2.1.0 (2017-11-02)
   * Unforked, returning to the "Search Keys" name
   * Renamed back all references to "Add Search Number"
+  * Added a "package-lock.json" file for npm 5 usage
 
 * 2.0.0 (2017-09-13)
   * Initially forked as "Add Search Number"
