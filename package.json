@@ -4,11 +4,11 @@
   "description": "Lets you go to search results by pressing the number of the search result.",
   "main": "searchkeys.js",
   "devDependencies": {
-    "eslint": "^4.10.0"
+    "eslint": "^7.18.0"
   },
   "scripts": {
-    "test": "eslint .",
-    "lint": "eslint ."
+    "test": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "author": "Gary Kwong",
   "license": "MPL-2.0",
