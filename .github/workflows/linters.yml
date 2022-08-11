@@ -25,6 +25,16 @@ jobs:
     - name: CodeQL languages, comma-separated, for list see https://codeql.github.com/docs/codeql-cli/creating-codeql-databases/
       if: startsWith(runner.os, 'Linux')
       run: echo "CODEQL_LANGUAGES=javascript," >> "$GITHUB_ENV"
+    # CodeQL preprocessing checks commence
+    - name: Current git branch ref
+      if: startsWith(runner.os, 'Linux')
+      run: echo "$GITHUB_REF"
+    - name: Current git commit
+      if: startsWith(runner.os, 'Linux')
+      run: echo $(git rev-parse --verify HEAD)
+    - name: Current repository name
+      if: startsWith(runner.os, 'Linux')
+      run: echo "$GITHUB_REPOSITORY"
     - name: Find CodeQL files on GitHub Actions runner OS
       if: startsWith(runner.os, 'Linux')
       run: echo CODEQL_DIR=$(echo /opt/hostedtoolcache/CodeQL/*/x64/codeql) >> "$GITHUB_ENV"
@@ -61,6 +71,7 @@ jobs:
             exit 1 ;
           fi ;
         done ;
+    # CodeQL preprocessing checks finish
     - name: Create codeql database for specified languages
       if: startsWith(runner.os, 'Linux')
       run: |
@@ -81,7 +92,7 @@ jobs:
         echo "$CODEQL_TOKEN" |
         for SARIF in $(ls out-*.sarif) ;
         do
-          "$CODEQL_BIN" github upload-results --commit=$(git rev-parse --verify HEAD) --ref=refs/heads/$(git rev-parse --abbrev-ref HEAD) --repository="$GITHUB_REPOSITORY" --sarif="$SARIF" --github-auth-stdin ;
+          "$CODEQL_BIN" github upload-results --commit=$(git rev-parse --verify HEAD) --ref="$GITHUB_REF" --repository="$GITHUB_REPOSITORY" --sarif="$SARIF" --github-auth-stdin ;
         done ;
       env:
         CODEQL_TOKEN: ${{ secrets.CODEQL_UPLOAD_TOKEN }}
