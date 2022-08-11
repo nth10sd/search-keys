@@ -97,5 +97,19 @@ jobs:
     # grep returns exit code 2 if specified file is not present
     - name: Look for startLine to see if any issues are found, if so, return exit code 1
       if: startsWith(runner.os, 'Linux')
-      run: grep --context=11 startLine out-*.sarif ; EXIT_CODE=$? ; if [ "$EXIT_CODE" -eq 0 ]; then echo ERROR ; fi ;
+      run: |
+        for OUT_FILE in $(ls out-*.sarif) ;
+          do
+            if ! (
+              grep --context=11 startLine "$OUT_FILE" ;
+              EXIT_CODE=$? ;
+              if [ "$EXIT_CODE" -eq 0 ] ;
+              then
+                exit 1;
+              fi ;
+            ) ;
+            then
+              exit 1 ;
+            fi ;
+          done ;
     # CodeQL analysis section END
