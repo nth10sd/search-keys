@@ -17,9 +17,9 @@ jobs:
       run: ./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx
 
     # CodeQL analysis section START
-    # Linux-only, enable on GitHub for public repos and private repos on Enterprise plan
+    # Linux-only, enable on GitHub for public repos and private repos on Enterprise plan with Advanced Security
     # IMPORTANT setup steps:
-    #   1) If this is a private repo NOT on a GitHub Enterprise plan, disable the last CodeQL result upload step
+    #   1) If this is a private repo NOT on a GitHub Enterprise plan with Advanced Security, disable the last CodeQL result upload step
     #   2) Check ${{ secrets.CODEQL_UPLOAD_TOKEN }} has been added and updated in the GitHub settings of this repo
     #   3) Check CodeQL languages for this repo are updated correctly
     - name: CodeQL languages, comma-separated, for list see https://codeql.github.com/docs/codeql-cli/creating-codeql-databases/
@@ -37,7 +37,7 @@ jobs:
       run: echo "$GITHUB_REPOSITORY"
     - name: Find CodeQL files on GitHub Actions runner OS
       if: startsWith(runner.os, 'Linux')
-      run: echo CODEQL_DIR=$(echo /opt/hostedtoolcache/CodeQL/*/x64/codeql) >> "$GITHUB_ENV"
+      run: pushd /opt/hostedtoolcache/CodeQL/ || exit ; export CODEQL_VER=( * ) ; echo CODEQL_DIR="/opt/hostedtoolcache/CodeQL/${CODEQL_VER[-1]}/x64/codeql" >> "$GITHUB_ENV" ; popd || exit ;
     - name: Find CodeQL binary on GitHub Actions runner OS
       if: startsWith(runner.os, 'Linux')
       run: |
@@ -83,7 +83,7 @@ jobs:
         do
           "$CODEQL_BIN" database analyze codeql-result-database/"$LANG"/ --sarif-category="$LANG" --output=out-"$LANG".sarif --format=sarif-latest --threads=0 ;
         done ;
-    - name: Upload codeql results to public GitHub repo or private repo on an enterprise plan
+    - name: Upload codeql results to public GitHub repo or private repo on an enterprise plan with Advanced Security
       if: startsWith(runner.os, 'Linux')
       run: |
         echo "$CODEQL_TOKEN" |
@@ -93,6 +93,7 @@ jobs:
         done ;
       env:
         CODEQL_TOKEN: ${{ secrets.CODEQL_UPLOAD_TOKEN }}
+    # We should search through grep after trying to upload, if applicable
     # grep returns exit code 1 if string is not found but specified file is present
     # grep returns exit code 2 if specified file is not present
     - name: Look for startLine to see if any issues are found, if so, return exit code 1
