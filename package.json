@@ -4,7 +4,7 @@
   "description": "Lets you go to search results by pressing the number of the search result.",
   "main": "searchkeys.js",
   "devDependencies": {
-    "eslint": "^7.32.0"
+    "eslint": "^8.44.0"
   },
   "scripts": {
     "test": "eslint . --ext .js,.jsx,.ts,.tsx",
